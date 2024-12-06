@@ -4,11 +4,13 @@
 :root {
     --bg-color: #ffffff;
     --text-color: #0037ff;
+    --text-color-copyright: #000000;
 }
 
 :root[data-theme="dark"] {
     --bg-color: #000000;
     --text-color: #0b07ff;
+    --text-color-copyright: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -81,3 +83,16 @@ body {
 .letter-small:hover {
     font-variation-settings: 'wght' 700;
 } 
+
+.copyright {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
+    color: var(--text-color-copyright);
+    font-size: 0.875rem;
+    font-variation-settings: 'wght' 400;
+}
