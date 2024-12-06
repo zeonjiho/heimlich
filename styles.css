@@ -11,15 +11,12 @@
     --text-color: #0b07ff;
 }
 
-/*
-/* 기존 미디어쿼리는 제거하고 시스템 설정에 따른 초기 테마 설정 */
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme]) {
-        --bg-color: #1a1a1a;
-        --text-color: #1100ff;
+        --bg-color: #000000;
+        --text-color: #0b07ff;
     }
 }
-*/
 
 * {
     margin: 0;
