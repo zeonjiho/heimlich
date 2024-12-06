@@ -1,22 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&display=swap');
 
 :root {
     --bg-color: #ffffff;
     --text-color: #0037ff;
+    --text-color-rgb: 0, 55, 255;
     --text-color-copyright: #000000;
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-:root[data-theme="dark"] {
+/* 다크 테마 */
+:root.dark {
     --bg-color: #000000;
     --text-color: #0b07ff;
+    --text-color-rgb: 11, 7, 255;
     --text-color-copyright: #ffffff;
 }
 
+/* 시스템 테마는 유지하되 수동 설정이 없을 때만 적용 */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme]) {
+    :root:not(.light):not(.dark) {
         --bg-color: #000000;
         --text-color: #0b07ff;
+        --text-color-copyright: #ffffff;
     }
 }
 
@@ -32,16 +40,20 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .container {
     padding: 2rem;
+    position: relative;
+    z-index: 3;
 }
 
 .text-container {
     display: flex;
     gap: 0rem;
+    letter-spacing: -0.3em;
+    position: relative;
 }
 
 /* 또는 */
@@ -58,6 +70,12 @@ body {
     cursor: pointer;
     font-variation-settings: 'wght' 400;
     transition: font-variation-settings 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: auto;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    transition: color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .letter:hover {
@@ -95,4 +113,98 @@ body {
     color: var(--text-color-copyright);
     font-size: 0.875rem;
     font-variation-settings: 'wght' 400;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.social-links {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1.5rem;
+    opacity: 0;
+    z-index: 3;
+    pointer-events: auto;
+}
+
+.social-button {
+    color: var(--text-color-copyright);
+    font-size: 1.25rem;
+    opacity: 0.4;
+    pointer-events: auto;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.social-button:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+
+#physicsCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.letter-description {
+    position: absolute;
+    top: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+    pointer-events: none;
+    width: 100%;
+}
+
+.description-title {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    font-variation-settings: 'wght' 700;
+    letter-spacing: -0.02em;
+}
+
+.description-text {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 1rem;
+    color: var(--text-color-copyright);
+    max-width: 600px;
+    margin: 0 auto;
+    font-variation-settings: 'wght' 200;
+    opacity: 0.8;
+}
+
+.look-around-btn {
+    position: fixed;
+    bottom: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 28px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    color: var(--text-color);
+    background: rgba(var(--text-color-rgb), 0);
+    border: 1px solid rgba(var(--text-color-rgb), 0.3);
+    border-radius: 30px;
+    cursor: pointer;
+    z-index: 3;
+    pointer-events: auto;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.look-around-btn:hover {
+    background: rgba(var(--text-color-rgb), 0.08);
+    border: 1px solid rgba(var(--text-color-rgb), 1);
+    transform: translateX(-50%) translateY(-4px);
 }
