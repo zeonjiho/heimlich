@@ -1,30 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&display=swap');
-
 :root {
     --bg-color: #ffffff;
     --text-color: #0037ff;
     --text-color-rgb: 0, 55, 255;
     --text-color-copyright: #000000;
-    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    --social-icon-color: #000000;
+    --social-icon-hover: #0037ff;
+    --button-border-color: rgba(0, 55, 255, 0.3);
+    --button-hover-bg: rgba(0, 55, 255, 0.08);
+    --button-text-color: #0037ff;
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+
 /* 다크 테마 */
+
 :root.dark {
     --bg-color: #000000;
     --text-color: #0b07ff;
     --text-color-rgb: 11, 7, 255;
     --text-color-copyright: #ffffff;
+    --social-icon-color: #ffffff;
+    --social-icon-hover: #dedede;
+    --button-border-color: rgba(255, 255, 255, 0.3);
+    --button-hover-bg: rgba(255, 255, 255, 0.08);
+    --button-text-color: #ffffff;
 }
 
+
 /* 시스템 테마는 유지하되 수동 설정이 없을 때만 적용 */
+
 @media (prefers-color-scheme: dark) {
-    :root:not(.light):not(.dark) {
+     :root:not(.light):not(.dark) {
         --bg-color: #000000;
         --text-color: #0b07ff;
         --text-color-copyright: #ffffff;
+        --button-text-color: #ffffff;
     }
 }
 
@@ -47,6 +60,7 @@ body {
     padding: clamp(1rem, 4vw, 2rem);
     position: relative;
     z-index: 3;
+    margin-bottom: clamp(2rem, 10vh, 1rem);
 }
 
 .text-container {
@@ -54,14 +68,18 @@ body {
     gap: 0rem;
     letter-spacing: clamp(-0.6em, -1vw, -0.2em);
     position: relative;
+    margin-bottom: clamp(-2rem, -10vh, -5rem);
 }
 
+
 /* 또는 */
+
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100..900&display=swap');
+
 /* 또는 */
+
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
-
 .letter {
     font-size: clamp(4rem, 15vw, 12rem);
     font-family: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
@@ -80,16 +98,19 @@ body {
 
 .letter:hover {
     font-variation-settings: 'wght' 700;
-} 
+}
 
 .letter-small {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 5rem;
-    font-family: 'Sora', sans-serif;  /* 옵션 1 */
-    /* font-family: 'Work Sans', sans-serif; */  /* 옵션 2 */
-    /* font-family: 'Space Grotesk', sans-serif; */  /* 옵션 3 */
+    font-family: 'Sora', sans-serif;
+    /* 옵션 1 */
+    /* font-family: 'Work Sans', sans-serif; */
+    /* 옵션 2 */
+    /* font-family: 'Space Grotesk', sans-serif; */
+    /* 옵션 3 */
     color: var(--text-color);
     display: inline-block;
     font-size: 2rem;
@@ -100,7 +121,7 @@ body {
 
 .letter-small:hover {
     font-variation-settings: 'wght' 700;
-} 
+}
 
 .copyright {
     position: fixed;
@@ -129,18 +150,28 @@ body {
 }
 
 .social-button {
-    color: var(--text-color-copyright);
+    color: var(--social-icon-color);
     font-size: 1.25rem;
     opacity: 0.4;
     pointer-events: auto;
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10%;
+    background: rgba(var(--social-icon-color), 0);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-decoration: none;
 }
 
 .social-button:hover {
     opacity: 1;
     transform: translateY(-1px);
+    color: var(--social-icon-hover);
+    background: rgba(var(--social-icon-color), 0.5);
 }
-
 
 #physicsCanvas {
     position: fixed;
@@ -190,23 +221,26 @@ body {
     left: 50%;
     transform: translateX(-50%);
     padding: 12px 28px;
-    font-family: 'Source Code Pro', monospace;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
     font-size: 0.875rem;
     letter-spacing: 0.05em;
-    color: var(--text-color);
-    background: rgba(var(--text-color-rgb), 0);
-    border: 1px solid rgba(var(--text-color-rgb), 0.3);
+    color: var(--button-text-color);
+    background: transparent;
+    border: 1px solid var(--button-border-color);
     border-radius: 30px;
     cursor: pointer;
     z-index: 3;
     pointer-events: auto;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), font-variation-settings 0.3s ease;
+    font-variation-settings: 'wght' 400;
 }
 
 .look-around-btn:hover {
-    background: rgba(var(--text-color-rgb), 0.08);
-    border: 1px solid rgba(var(--text-color-rgb), 1);
+    color: var(--button-text-color);
+    background: var(--button-hover-color);
+    border: 3px solid var(--button-border-color);
     transform: translateX(-50%) translateY(-4px);
+    font-variation-settings: 'wght' 700;
 }
 
 #three-container {
@@ -219,58 +253,67 @@ body {
     pointer-events: none;
 }
 
+
 /* 모바일 최적화 */
+
 @media screen and (max-width: 768px) {
     .letter {
         font-size: clamp(3rem, 12vw, 8rem);
     }
-    
     .letter-small {
         font-size: 1.5rem;
     }
-    
     .description-title {
         font-size: clamp(1rem, 3vw, 1.5rem);
     }
-    
     .description-text {
         font-size: clamp(0.875rem, 2vw, 1rem);
         padding: 0 1rem;
     }
-    
     .look-around-btn {
-        bottom: 120px;
+        bottom: max(120px, 15vh);
         padding: 10px 24px;
         font-size: 0.75rem;
     }
-    
     .social-links {
         bottom: 60px;
     }
+    .letter-description {
+        max-height: calc(100vh - 300px);
+    }
 }
 
+
 /* iOS Safari 최적화 */
+
 @supports (-webkit-touch-callout: none) {
     .container {
         /* iOS Safari에서 100vh 문제 해결 */
         min-height: -webkit-fill-available;
     }
-    
     /* iOS에서 터치 하이라이트 제거 */
-    .letter, .letter-small, .social-button, .look-around-btn {
+    .letter,
+    .letter-small,
+    .social-button,
+    .look-around-btn {
         -webkit-tap-highlight-color: transparent;
     }
 }
 
+
 /* Firefox 최적화 */
+
 @-moz-document url-prefix() {
-    .letter, .letter-small {
-        /* Firefox에서 폰트 렌더링 개선 */
+    .letter,
+    .letter-small {
+        /* Firefox에 폰트 렌더링 개선 */
         -moz-osx-font-smoothing: grayscale;
     }
 }
 
+
 /* 저사양 디바이스 최적화 */
+
 @media (prefers-reduced-motion: reduce) {
     * {
         animation-duration: 0.01ms !important;
@@ -280,7 +323,9 @@ body {
     }
 }
 
+
 /* 프린트 스타일 */
+
 @media print {
     .look-around-btn,
     .social-links,
@@ -288,12 +333,35 @@ body {
     #three-container {
         display: none;
     }
-    
     body {
         background: white;
     }
-    
-    .letter, .letter-small, .description-text {
+    .letter,
+    .letter-small,
+    .description-text {
         color: black !important;
     }
+}
+
+
+/* 스포트라이트 효과 */
+
+.spotlight {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: radial-gradient(circle at center, rgba(var(--text-color-rgb), 0.15) 0%, rgba(var(--text-color-rgb), 0) 70%);
+    transform: translate(-50%, -50%);
+    mix-blend-mode: screen;
+    z-index: 1;
+}
+
+
+/* 활성화 시 */
+
+.spotlight.active {
+    opacity: 1;
 }

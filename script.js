@@ -1,12 +1,12 @@
 document.querySelectorAll('.letter').forEach((letter, index) => {
     letter.style.opacity = '0';
     letter.style.transform = 'translateY(30px)';
-    
+
     setTimeout(() => {
         letter.style.transition = 'opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
         letter.style.opacity = '1';
         letter.style.transform = 'translateY(0)';
-        
+
         setTimeout(() => {
             letter.style.transition = 'font-variation-settings 0.25s cubic-bezier(0.4, 0, 0.2, 1)';
         }, 600);
@@ -21,7 +21,7 @@ document.querySelectorAll('.letter').forEach((letter, index) => {
             }, 600); // 마지막 글자 애니메이션 후 약간의 딜레이
         }
     }, index * 100);
-}); 
+});
 
 // 카피라이트 애니메이션
 const copyright = document.querySelector('.copyright');
@@ -42,7 +42,7 @@ const socialLinks = document.querySelector('.social-links');
 setTimeout(() => {
     socialLinks.style.transition = 'opacity 0.4s ease-in-out';
     socialLinks.style.opacity = '1';
-}, totalAnimationTime + 200);  // 카피라이트 애니메이션 후에 표시
+}, totalAnimationTime + 200); // 카피라이트 애니메이션 후에 표시
 
 // 테마 관련 함수들
 const themeManager = {
@@ -70,7 +70,7 @@ const themeManager = {
     toggle() {
         const root = document.documentElement;
         const currentTheme = localStorage.getItem('theme');
-        
+
         if (currentTheme === 'light') {
             root.classList.remove('light');
             root.classList.add('dark');
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const container = document.querySelector('.text-container');
 container.addEventListener('click', () => {
     themeManager.toggle();
-}); 
+});
 
 // 시스템 테마 변경 감지
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
@@ -150,9 +150,15 @@ const descriptionTitle = document.querySelector('.description-title');
 const descriptionText = document.querySelector('.description-text');
 const descriptionContainer = document.querySelector('.letter-description');
 
+// 속도 관련 변수들을 전역 범위에 선
+let targetSpeed = 0.001;
+let currentSpeed = 0.001;
+const speedTransitionFactor = 0.01;
+
 // Three.js 설정
 let scene, camera, renderer;
 let currentModel = null;
+let currentRotation = { x: 0, y: 0 };
 
 const shapes = {
     'h': 'cube',
@@ -165,11 +171,10 @@ const shapes = {
     'h2': 'dodecahedron'
 };
 
-// 회전값을 저장할 변수 추가
-let currentRotation = {
-    x: 0,
-    y: 0
-};
+// 불투명도 관련 변수 추가
+let targetOpacity = 0.3;
+let currentOpacity = 0;
+const opacityTransitionFactor = 0.05;
 
 function initThree() {
     scene = new THREE.Scene();
@@ -180,16 +185,25 @@ function initThree() {
     camera.position.z = 5;
 }
 
+function updateSpeed() {
+    currentSpeed = currentSpeed + (targetSpeed - currentSpeed) * speedTransitionFactor;
+}
+
 function createWireframeModel(shape) {
     if (currentModel) {
-        // 현재 회전값 저장
         currentRotation.x = currentModel.rotation.x;
         currentRotation.y = currentModel.rotation.y;
         scene.remove(currentModel);
     }
 
+    currentSpeed = 0.01;
+    targetSpeed = 0.001;
+
+    // 불투명도 초기화
+    currentOpacity = 0;
+
     let geometry;
-    switch(shape) {
+    switch (shape) {
         case 'cube':
             geometry = new THREE.BoxGeometry(2, 2, 2);
             break;
@@ -216,32 +230,37 @@ function createWireframeModel(shape) {
             break;
     }
 
-    // 재질 설정 수정
     const material = new THREE.MeshBasicMaterial({
         color: getComputedStyle(document.documentElement).getPropertyValue('--text-color'),
         wireframe: true,
         transparent: true,
-        opacity: 0.0,  // 투명도 조정
-        depthWrite: false  // 깊이 버퍼 비활성화로 투명도 개선
+        opacity: currentOpacity,
+        depthWrite: false
     });
 
     currentModel = new THREE.Mesh(geometry, material);
-    
-    // 저장된 회전값 적용
     currentModel.rotation.x = currentRotation.x;
     currentModel.rotation.y = currentRotation.y;
-    
+
     scene.add(currentModel);
+}
+
+function updateOpacity() {
+    if (currentModel) {
+        currentOpacity += (targetOpacity - currentOpacity) * opacityTransitionFactor;
+        currentModel.material.opacity = currentOpacity;
+    }
 }
 
 function animate() {
     requestAnimationFrame(animate);
     if (currentModel) {
-        // 회전값 업데이트
-        currentModel.rotation.x += 0.001;
-        currentModel.rotation.y += 0.001;
-        
-        // 현재 회전값 저장
+        updateSpeed();
+        updateOpacity(); // 불투명도 업데이트 추가
+
+        currentModel.rotation.x += currentSpeed;
+        currentModel.rotation.y += currentSpeed;
+
         currentRotation.x = currentModel.rotation.x;
         currentRotation.y = currentModel.rotation.y;
     }
@@ -254,9 +273,9 @@ animate();
 
 // 글자 호버 이벤트 수정
 document.querySelectorAll('.letter').forEach((letter, index) => {
-    const letterKey = letter.textContent + (letter.textContent === 'h' && index > 0 ? '2' : 
-                                          letter.textContent === 'i' && index > 2 ? '2' : '');
-    
+    const letterKey = letter.textContent + (letter.textContent === 'h' && index > 0 ? '2' :
+        letter.textContent === 'i' && index > 2 ? '2' : '');
+
     letter.addEventListener('mouseenter', () => {
         const description = letterDescriptions[letterKey];
         if (description) {
@@ -264,7 +283,7 @@ document.querySelectorAll('.letter').forEach((letter, index) => {
             descriptionText.textContent = description.text;
             descriptionContainer.style.opacity = '1';
             descriptionContainer.style.visibility = 'visible';
-            
+
             // 3D 모델 생성
             createWireframeModel(shapes[letterKey]);
         }
@@ -278,10 +297,10 @@ document.querySelectorAll('.letter').forEach((letter, index) => {
             currentModel = null;
         }
     });
-}); 
+});
 
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-}); 
+});
